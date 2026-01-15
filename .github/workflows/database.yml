@@ -1,0 +1,60 @@
+name: Database Migrations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/db/src/schema/**'
+      - 'packages/db/drizzle/**'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Migration action'
+        required: true
+        default: 'migrate'
+        type: choice
+        options:
+          - migrate
+          - generate
+          - push
+
+jobs:
+  migrate:
+    name: Run Migrations
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate migrations
+        if: ${{ inputs.action == 'generate' }}
+        run: pnpm --filter @sideline/db db:generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Run migrations
+        if: ${{ inputs.action == 'migrate' || inputs.action == '' }}
+        run: pnpm --filter @sideline/db db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Push schema
+        if: ${{ inputs.action == 'push' }}
+        run: pnpm --filter @sideline/db db:push
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
