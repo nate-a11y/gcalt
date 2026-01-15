@@ -10,7 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@mux/mux-node": "^9.0.1"
+    "@mux/mux-node": "^12.8.1"
   },
   "devDependencies": {
     "@sideline/config": "workspace:*",
