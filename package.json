@@ -5,17 +5,21 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:watch": "turbo test:watch",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo clean && rm -rf node_modules",
     "db:generate": "pnpm --filter @sideline/db generate",
     "db:migrate": "pnpm --filter @sideline/db migrate",
     "db:push": "pnpm --filter @sideline/db push",
     "db:studio": "pnpm --filter @sideline/db studio"
   },
   "devDependencies": {
-    "next": "^14.2.0",
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.0",
-    "typescript": "^5.4.0"
+    "next": "^16.0.0",
+    "prettier": "^3.4.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
